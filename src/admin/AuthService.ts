@@ -14,16 +14,18 @@ export class AuthService {
     }
 
     const user: User = userList.find((o: any) => o.email);
+    try {
+      const passEqual = await bcrypt.compare(password, user.password);
 
-    const passEqual = await bcrypt.compare(password, user.password);
+      if (!passEqual) {
+        return new Error("Não autorizado");
+      }
 
-    if (!passEqual) {
-      return new Error("Não autorizado");
+      const token = jwt.sign(user._id, process.env.JWT_SECRET);
+      return token;
+    } catch (error) {
+      return new Error("Não autorizado" + error);
     }
-
-    const token = await jwt.sign(user._id, process.env.JWT_SECRET);
-
-    return token;
   }
 
   async verifyToken(token: any) {
@@ -31,7 +33,8 @@ export class AuthService {
       return new Error("Não autrizado!");
     }
     try {
-      const payload = await jwt.verify(token, process.env.JWT_SECRET);
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(payload);
 
       return payload;
     } catch (error) {

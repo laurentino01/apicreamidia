@@ -17,6 +17,7 @@ export async function verifyUser(
   const payload = await authService.verifyToken(token);
 
   if (payload instanceof Error) {
+    next();
     return new Error("Não autorizado");
   }
 

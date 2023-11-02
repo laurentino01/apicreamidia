@@ -28,7 +28,11 @@ router.get(
   async (req: Request, res: Response) => {
     const payload = req.headers["user-payload"];
 
-    console.log(payload);
+    if (!payload) {
+      res.status(401).json({
+        message: "Não autorizado",
+      });
+    }
 
     resOk(req, res, { payload });
   }
@@ -49,6 +53,7 @@ router.get("/login", mongoConnect, async (req: Request, res: Response) => {
       message: "Não Autorizado!",
     });
   }
+
   res.header("x-auth-token", token as string);
   res.status(200).json({
     statusCode: 200,
