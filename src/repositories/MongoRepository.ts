@@ -7,7 +7,7 @@ import { userModel } from "../admin/model/userSchema";
 export class MongoRepository implements IDatabaseUser {
   private userModel = userModel;
 
-  async add(user: Omit<User, "id">): Promise<string | Error> {
+  async add(user: User): Promise<string | Error> {
     try {
       const res = await this.userModel.create(user);
       return "Usuário criado com sucesso!";
@@ -42,10 +42,15 @@ export class MongoRepository implements IDatabaseUser {
     }
   }
 
-  async viewOne(id: string): Promise<any | Error> {
+  async viewOne(id?: string, email?: string): Promise<any | Error> {
     try {
-      const res = await this.userModel.findById(id);
-      return res;
+      if (id) {
+        const res = await this.userModel.findById(id);
+        return res;
+      } else {
+        const res = await this.userModel.find({ email });
+        return res;
+      }
     } catch (error) {
       return new Error("Erro ao mostrar usuários");
     }

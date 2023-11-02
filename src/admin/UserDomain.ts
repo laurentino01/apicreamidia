@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { DumpDomain } from "../dumps/DumpDomain";
-import { ToolBox } from "./Toolox";
+import { ToolBox } from "./ToolBox";
 
 export class User {
   public toolBox: ToolBox;
@@ -8,10 +8,10 @@ export class User {
   constructor(
     public email: string,
     public password: string,
-    public readonly id?: string
+    public readonly _id?: string
   ) {
-    if (!id) {
-      this.id = uuid();
+    if (_id === undefined) {
+      this._id = uuid();
     }
     const dumps = new DumpDomain();
     this.toolBox = new ToolBox(dumps);

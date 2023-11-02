@@ -6,5 +6,5 @@ export interface IDatabaseUser {
   remove(id: string): Promise<string | Error>;
   update(id: string, newData: UserDto): Promise<string | Error>;
   viewAll(): Promise<any | Error>;
-  viewOne(id: string): Promise<any | Error>;
+  viewOne(id?: string, email?: string): Promise<any | Error>;
 }
