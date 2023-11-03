@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
+    "target": "ES6",
     "module": "CommonJS",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "sourceMap": true,
     "outDir": "dist",
+    "rootDir": "./src",
     "esModuleInterop": true
   },
   "include": ["src/**/*"],
