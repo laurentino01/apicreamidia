@@ -2,12 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
 export async function mongoConnect(
-  req: Request = null,
-  res: Response = null,
+  req: Request,
+  res: Response,
   next: NextFunction
 ) {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI as string);
     try {
       next();
     } catch {}

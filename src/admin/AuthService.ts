@@ -13,7 +13,12 @@ export class AuthService {
       return new Error("Não autorizado");
     }
 
-    const user: User = userList.find((o: any) => o.email);
+    const user: User | undefined = userList.find((o: any) => o.email);
+
+    if (!user) {
+      return new Error("Não autorizado");
+    }
+
     try {
       const passEqual = await bcrypt.compare(password, user.password);
 
@@ -21,7 +26,10 @@ export class AuthService {
         return new Error("Não autorizado");
       }
 
-      const token = jwt.sign(user._id, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        user._id as string,
+        process.env.JWT_SECRET as string
+      );
       return token;
     } catch (error) {
       return new Error("Não autorizado" + error);
@@ -33,7 +41,7 @@ export class AuthService {
       return new Error("Não autrizado!");
     }
     try {
-      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      const payload = jwt.verify(token, process.env.JWT_SECRET as string);
       console.log(payload);
 
       return payload;
