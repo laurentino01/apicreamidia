@@ -11,4 +11,6 @@ app.use(express.json());
 
 routes(app);
 
-app.listen(3000, () => console.log("server on " + 3000));
+app.listen(process.env.PORT ? Number(process.env.PORT) : 3000, () =>
+  console.log("server up... ")
+);
