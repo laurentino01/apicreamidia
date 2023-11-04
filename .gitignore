@@ -1,3 +1,4 @@
+package-lock.com
 /node_modules
 *.env
 *.http
