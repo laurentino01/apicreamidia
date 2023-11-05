@@ -4,3 +4,4 @@ package-lock.com
 *.http
 /dist
 
+/http_testes
