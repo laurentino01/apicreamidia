@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { MongoRepository } from "../repositories/MongoRepository";
 import { UserService } from "../admin/UserService";
 import { AuthService } from "../admin/AuthService";
+import { HttpHandler } from "../utils/HttpHandler";
 
 export async function verifyUser(
   req: Request,
@@ -17,8 +18,7 @@ export async function verifyUser(
   const payload = await authService.verifyToken(token);
 
   if (payload instanceof Error) {
-    next();
-    return new Error("Não autorizado");
+    new HttpHandler().unauthorized(res, "Não Autorizado!");
   }
 
   req.headers["user-payload"] = payload as string;

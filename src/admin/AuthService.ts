@@ -42,12 +42,10 @@ export class AuthService {
     }
     try {
       const payload = jwt.verify(token, process.env.JWT_SECRET as string);
-      console.log(payload);
-
+      console.log("verified");
       return payload;
     } catch (error) {
-      return new Error("Não autrizado!" + error);
+      return new Error();
     }
   }
 }
-

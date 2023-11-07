@@ -6,7 +6,7 @@ const dumpSchema = new Schema({
   _id: String,
   url: String,
   image: String,
-  userId: String,
+  destaque: Boolean,
   dateCreate: { type: Date, default: Date.now },
 });
 

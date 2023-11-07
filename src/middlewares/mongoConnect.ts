@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
+import { HttpHandler } from "../utils/HttpHandler";
 
 export async function mongoConnect(
   req: Request,
@@ -11,9 +12,9 @@ export async function mongoConnect(
     try {
       next();
     } catch {}
-    console.log("conectado ao banco com sucesso!");
+    console.log("database up...");
     return mongoose;
   } catch (error) {
-    return error;
+    return new HttpHandler().badRequest(res, error);
   }
 }

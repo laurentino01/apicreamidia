@@ -4,15 +4,15 @@ import { User } from "./UserDomain";
 import bcrypt from "bcrypt";
 import { InMemoryDataBase } from "../repositories/inMemoryDataBase";
 import { UserDto } from "./dto/UserDto";
-import { mongoConnect } from "../middlewares/mongoConnect";
 import { MongoRepository } from "../repositories/MongoRepository";
-import jwt from "jsonwebtoken";
-import { verifyUser } from "../middlewares/verifyUser";
 import { AuthService } from "./AuthService";
+import { HttpHandler } from "../utils/HttpHandler";
 
 const router = Router();
 
-function resOk(req: Request, res: Response, props: any) {
+const http = new HttpHandler();
+
+/* function resOk(req: Request, res: Response, props: any) {
   return res.status(200).json({
     statusCode: 200,
     body: {
@@ -20,6 +20,15 @@ function resOk(req: Request, res: Response, props: any) {
     },
   });
 }
+
+function badRequest(req: Request, res: Response, props: any) {
+  return res.status(400).json({
+    statusCode: 400,
+    body: {
+      props,
+    },
+  });
+} */
 
 router.get("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -31,27 +40,12 @@ router.get("/login", async (req: Request, res: Response) => {
   const token = await authService.login(email, password);
 
   if (token instanceof Error) {
-    res.status(401).json({
-      statusCode: 401,
-      message: "Não Autorizado!",
-    });
+    http.unauthorized(res, "Não autorizado!");
   }
 
   res.header("x-auth-token", token as string);
-  res.status(200).json({
-    statusCode: 200,
-    "x-auth-token": token,
-  });
+  http.ok(res, { "x-auth-token": token });
 });
-
-function badRequest(req: Request, res: Response, props: any) {
-  return res.status(400).json({
-    statusCode: 400,
-    body: {
-      props,
-    },
-  });
-}
 
 /* create */
 router.post("/", async (req: Request, res: Response) => {
@@ -65,10 +59,10 @@ router.post("/", async (req: Request, res: Response) => {
   const resDb = await userService.add(user);
 
   if (resDb instanceof Error) {
-    badRequest(req, res, { message: resDb });
+    http.badRequest(res, resDb);
   }
 
-  resOk(req, res, { message: resDb });
+  http.ok(res, resDb);
 });
 
 /* update */
@@ -80,13 +74,24 @@ router.put("/", async (req: Request, res: Response) => {
   const resDb = service.update(id, { email, password });
 
   if (resDb instanceof Error) {
-    badRequest(req, res, { resDb });
+    http.badRequest(res, resDb);
   }
 
-  resOk(req, res, { resDb });
+  http.ok(res, resDb);
 });
 
 /* view all */
+router.get("/", async (req: Request, res: Response) => {
+  const db = new MongoRepository();
+  const service = new UserService(db);
+
+  const resDb = await service.viewAll();
+
+  if (resDb instanceof Error) {
+    http.badRequest(res, resDb);
+  }
+  http.ok(res, resDb);
+});
 
 /* view one */
 router.get("/:id", async (req: Request, res: Response) => {
@@ -98,9 +103,9 @@ router.get("/:id", async (req: Request, res: Response) => {
   const resDb = await service.viewOne(id);
 
   if (resDb instanceof Error) {
-    badRequest(req, res, { resDb });
+    http.badRequest(res, resDb);
   }
-  resOk(req, res, { resDb });
+  http.ok(res, resDb);
 });
 
 /* delete */
@@ -113,9 +118,9 @@ router.delete("/:id", async (req: Request, res: Response) => {
   const resDb = await service.remove(id);
 
   if (resDb instanceof Error) {
-    badRequest(req, res, { resDb });
+    http.badRequest(res, resDb);
   }
-  resOk(req, res, { resDb });
+  http.ok(res, resDb);
 });
 
 export default router;

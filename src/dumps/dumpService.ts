@@ -1,9 +1,5 @@
-import { User } from "../admin/UserDomain";
 import { IDatabaseDumps } from "../interfaces/IDatabaseDumps";
-import { IDatabaseUser } from "../interfaces/IDatabaseUser";
-import { MongoRepository } from "../repositories/MongoRepository";
 import { DumpDomain } from "./DumpDomain";
-import { DumpDto } from "./dto/DumpDto";
 
 export class DumpService implements IDatabaseDumps {
   constructor(private dump: DumpDomain, private db: IDatabaseDumps) {}
@@ -24,7 +20,7 @@ export class DumpService implements IDatabaseDumps {
     return await this.db.removeById(this.dump._id as string);
   }
 
-  async updateById(): Promise<string | Error> {
-    return await this.db.updateById(this.dump._id as string, this.dump);
+  async updateById(_id: string): Promise<string | Error> {
+    return await this.db.updateById(_id, this.dump);
   }
 }

@@ -15,6 +15,6 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
 routes(app);
 
-app.listen(process.env.PORT ? Number(process.env.PORT) : 3000, () =>
+app.listen(process.env.PORT ? Number(process.env.PORT) : 3001, () =>
   console.log("server up... ")
 );

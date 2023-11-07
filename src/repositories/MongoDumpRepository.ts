@@ -5,35 +5,35 @@ import { IDatabaseDumps } from "../interfaces/IDatabaseDumps";
 
 export class MongoDumpRepository implements IDatabaseDumps {
   private dumpModel = dumpModel;
-  constructor(private dump: DumpDomain) {}
+  constructor() {}
 
-  async add(): Promise<any | Error> {
+  async add(dump: DumpDomain): Promise<any | Error> {
     try {
-      return await this.dumpModel.create(this.dump);
+      return await this.dumpModel.create(dump);
     } catch (error) {
       return new Error("Erro ao criar");
     }
   }
 
-  async removeById(): Promise<any | Error> {
+  async removeById(_id: string): Promise<any | Error> {
     try {
-      return await this.dumpModel.deleteOne({ _id: this.dump._id });
+      return await this.dumpModel.deleteOne({ _id });
     } catch (error) {
       return new Error("Erro ao criar");
     }
   }
 
-  async findById(): Promise<any> {
+  async findById(_id: string): Promise<any> {
     try {
-      return await this.dumpModel.findById(this.dump._id);
+      return await this.dumpModel.findById(_id);
     } catch (error) {
       return new Error("Erro ao criar");
     }
   }
 
-  async updateById(): Promise<any | Error> {
+  async updateById(_id: string, dump: DumpDomain): Promise<any | Error> {
     try {
-      return await this.dumpModel.updateOne({ _id: this.dump._id }, this.dump);
+      return await this.dumpModel.updateOne({ _id }, dump);
     } catch (error) {
       return new Error("Erro ao criar");
     }

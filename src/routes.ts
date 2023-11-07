@@ -1,7 +1,6 @@
 import { Express } from "express";
-import dumpsRoutes from "./dumps/dumps.routes";
-import adminRoutes from "./admin/admin.routes";
-import { verifyUser } from "./middlewares/verifyUser";
+import dumpsRoutes from "./dumps/dumps.controller";
+import adminRoutes from "./admin/admin.controller";
 import { mongoConnect } from "./middlewares/mongoConnect";
 
 export function routes(app: Express) {
