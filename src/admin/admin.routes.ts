@@ -21,24 +21,7 @@ function resOk(req: Request, res: Response, props: any) {
   });
 }
 
-router.get(
-  "/dashboard",
-  mongoConnect,
-  verifyUser,
-  async (req: Request, res: Response) => {
-    const payload = req.headers["user-payload"];
-
-    if (!payload) {
-      res.status(401).json({
-        message: "Não autorizado",
-      });
-    }
-
-    resOk(req, res, { payload });
-  }
-);
-
-router.get("/login", mongoConnect, async (req: Request, res: Response) => {
+router.get("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const db = new MongoRepository();
@@ -71,7 +54,7 @@ function badRequest(req: Request, res: Response, props: any) {
 }
 
 /* create */
-router.post("/", mongoConnect, async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
   const { email, password }: Omit<User, "id"> = req.body;
   const salt = 10;
   const encryptedPassword = await bcrypt.hash(password, salt);
@@ -89,7 +72,7 @@ router.post("/", mongoConnect, async (req: Request, res: Response) => {
 });
 
 /* update */
-router.put("/", mongoConnect, async (req: Request, res: Response) => {
+router.put("/", async (req: Request, res: Response) => {
   const { id } = req.params;
   const { email, password }: UserDto = req.body;
   const service = new UserService(new InMemoryDataBase());
@@ -106,7 +89,7 @@ router.put("/", mongoConnect, async (req: Request, res: Response) => {
 /* view all */
 
 /* view one */
-router.get("/:id", mongoConnect, async (req: Request, res: Response) => {
+router.get("/:id", async (req: Request, res: Response) => {
   const id = req.params.id;
 
   const db = new MongoRepository();
@@ -121,7 +104,7 @@ router.get("/:id", mongoConnect, async (req: Request, res: Response) => {
 });
 
 /* delete */
-router.delete("/:id", mongoConnect, async (req: Request, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
   const db = new MongoRepository();
