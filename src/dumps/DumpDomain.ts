@@ -5,10 +5,10 @@ export class DumpDomain {
     public dumpUrl: string,
     public image: string,
     public userId: string,
-    public readonly id?: string
+    public readonly _id?: string
   ) {
-    if (!id) {
-      this.id = uuid();
+    if (!_id) {
+      this._id = uuid();
     }
   }
 }
