@@ -17,15 +17,28 @@ export class MongoDumpRepository implements IDatabaseDumps {
 
   async removeById(_id: string): Promise<any | Error> {
     try {
-      return await this.dumpModel.deleteOne({ _id });
+      const existsInData = await this.dumpModel.findById(_id);
+
+      if (!existsInData) {
+        return new Error("404");
+      }
+
+      const res = await this.dumpModel.deleteOne({ _id });
+
+      return res;
     } catch (error) {
-      return new Error("Erro ao criar");
+      return new Error("Error remove");
     }
   }
 
   async findById(_id: string): Promise<any> {
     try {
-      return await this.dumpModel.findById(_id);
+      const dumpInData = await this.dumpModel.findById(_id);
+
+      if (!dumpInData) {
+        return new Error("404");
+      }
+      return dumpInData;
     } catch (error) {
       return new Error("Erro ao criar");
     }
@@ -33,7 +46,7 @@ export class MongoDumpRepository implements IDatabaseDumps {
 
   async updateById(_id: string, dump: DumpDomain): Promise<any | Error> {
     try {
-      return await this.dumpModel.updateOne({ _id }, dump);
+      return await this.dumpModel.findByIdAndUpdate(_id, dump);
     } catch (error) {
       return new Error("Erro ao criar");
     }

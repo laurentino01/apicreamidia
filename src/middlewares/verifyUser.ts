@@ -18,10 +18,11 @@ export async function verifyUser(
   const payload = await authService.verifyToken(token);
 
   if (payload instanceof Error) {
-    new HttpHandler().unauthorized(res, "Não Autorizado!");
+    return new HttpHandler().unauthorized(res, "Não Autorizado!");
   }
 
   req.headers["user-payload"] = payload as string;
 
   next();
+  return;
 }

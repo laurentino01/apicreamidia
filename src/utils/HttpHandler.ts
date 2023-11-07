@@ -9,6 +9,12 @@ export class HttpHandler {
       body: { data },
     });
   }
+  notFound(res: Response, data?: any) {
+    return res.status(404).json({
+      status: 404,
+      body: { data },
+    });
+  }
   unauthorized(res: Response, data?: any) {
     return res.status(401).json({
       status: 401,
