@@ -46,9 +46,19 @@ export class MongoDumpRepository implements IDatabaseDumps {
 
   async updateById(_id: string, dump: DumpDomain): Promise<any | Error> {
     try {
-      return await this.dumpModel.findByIdAndUpdate(_id, dump);
-    } catch (error) {
-      return new Error("Erro ao criar");
+      const dumpInData = await this.dumpModel.findById(_id);
+
+      if (!dumpInData) {
+        return new Error("404");
+      }
+
+      const res = await this.dumpModel.updateOne(
+        dumpInData as DumpDomain,
+        dump
+      );
+      return res;
+    } catch (error: any) {
+      return new Error(error);
     }
   }
 

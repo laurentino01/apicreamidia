@@ -17,8 +17,7 @@ export class DumpService implements IDatabaseDumps {
   }
 
   async removeById(_id: string): Promise<string | Error> {
-    const dumpInData: DumpDomain = await this.db.findById(_id);
-    const res = await this.db.removeById(dumpInData._id as string);
+    const res = await this.db.removeById(_id);
     return res;
   }
 

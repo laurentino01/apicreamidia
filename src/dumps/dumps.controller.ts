@@ -11,6 +11,7 @@ import { MongoDumpRepository } from "../repositories/MongoDumpRepository";
 import { DumpService } from "./dumpService";
 import { verifyUser } from "../middlewares/verifyUser";
 import { HttpHandler } from "../utils/HttpHandler";
+import { DumpDto } from "./dto/DumpDto";
 
 const router = Router();
 const http = new HttpHandler();
@@ -37,14 +38,18 @@ router.put("/:id", verifyUser, async (req, res, next) => {
   const { id } = req.params;
   const { dumpUrl, image, highlight }: DumpDomain = req.body;
 
-  const newDump = new DumpDomain(dumpUrl, image, highlight);
+  const newDump = new DumpDto(dumpUrl, image, highlight);
   const db = new MongoDumpRepository();
   const service = new DumpService(db, newDump);
 
   const resDb = await service.updateById(id);
 
   if (resDb instanceof Error) {
-    http.unauthorized(res, resDb);
+    if (resDb.message === "404") {
+      return http.notFound(res, "dump não encontrado");
+    }
+
+    return http.badRequest(res, resDb.message);
   }
 
   http.ok(res, resDb);
@@ -76,7 +81,7 @@ router.get("/:id", verifyUser, async (req, res, next) => {
 
   if (resDb instanceof Error) {
     if (resDb.message === "404") {
-      return http.notFound(res, "usuario não encontrado");
+      return http.notFound(res, "dump não encontrado");
     }
     return http.badRequest(res, resDb.message);
   }
@@ -95,7 +100,7 @@ router.delete("/:id", verifyUser, async (req, res, next) => {
 
   if (resDb instanceof Error) {
     if (resDb.message === "404") {
-      return http.notFound(res, "usuario não encontrado");
+      return http.notFound(res, "dump não encontrado");
     }
 
     return http.badRequest(res, resDb);
