@@ -30,7 +30,7 @@ function badRequest(req: Request, res: Response, props: any) {
   });
 } */
 
-router.get("/login", async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const db = new MongoRepository();
