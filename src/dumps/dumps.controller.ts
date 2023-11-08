@@ -27,10 +27,10 @@ router.post("/", verifyUser, async (req, res, next) => {
   const resDb = await service.add();
 
   if (resDb instanceof Error) {
-    http.unauthorized(res, resDb);
+    return http.badRequest(res, resDb);
   }
 
-  http.ok(res, resDb);
+  return http.ok(res, resDb);
 });
 
 /* update */
