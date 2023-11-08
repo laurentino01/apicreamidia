@@ -27,7 +27,7 @@ router.post("/", verifyUser, async (req, res, next) => {
   const resDb = await service.add();
 
   if (resDb instanceof Error) {
-    return http.badRequest(res, resDb);
+    return http.badRequest(res, resDb.message);
   }
 
   return http.ok(res, resDb);
