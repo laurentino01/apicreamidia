@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { MongoRepository } from "../repositories/MongoRepository";
-import { UserService } from "../admin/UserService";
-import { AuthService } from "../admin/AuthService";
+import { MongoRepository } from "../repositories/MongoUserRepository";
+import { UserService } from "../user/UserService";
+import { AuthService } from "../auth/AuthService";
 import { HttpHandler } from "../utils/HttpHandler";
 
 export async function verifyUser(

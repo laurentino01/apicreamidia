@@ -4,9 +4,10 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
   _id: String,
+  name: String,
   email: String,
   password: String,
-  toobox: [{ id: String, type: String }],
+  role: String,
   dateCreate: { type: Date, default: Date.now },
 });
 

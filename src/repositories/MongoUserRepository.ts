@@ -1,20 +1,21 @@
-import mongoose from "mongoose";
-import { User } from "../admin/UserDomain";
+import { User } from "../user/UserDomain";
 import { IDatabaseUser } from "../interfaces/IDatabaseUser";
-import { UserDto } from "../admin/dto/UserDto";
-import { userModel } from "../admin/model/userSchema";
+import { UserDto } from "../user/dto/UserDto";
+import { userModel } from "../user/model/userSchema";
+import { Document } from "mongoose";
 
 export class MongoRepository implements IDatabaseUser {
   private userModel = userModel;
 
-  async add(user: User): Promise<string | Error> {
+  async add(user: User): Promise<Document<any> | Error> {
     try {
       const res = await this.userModel.create(user);
-      return "Usuário criado com sucesso!";
-    } catch (error) {
-      return new Error("erro ao criar usuário!");
+      return res;
+    } catch (error: any) {
+      return new Error(error);
     }
   }
+
   async remove(id: string): Promise<string | Error> {
     try {
       const res = this.userModel.deleteOne({ id });
@@ -24,7 +25,7 @@ export class MongoRepository implements IDatabaseUser {
     }
   }
 
-  async update(id: string, newData: UserDto): Promise<string | Error> {
+  async updateById(id: string, newData: UserDto): Promise<string | Error> {
     try {
       const res = await this.userModel.updateOne({ id }, newData);
       return "usuario atualizado com sucesso!";
@@ -33,7 +34,7 @@ export class MongoRepository implements IDatabaseUser {
     }
   }
 
-  async viewAll(): Promise<any | Error> {
+  async findAll(): Promise<any | Error> {
     try {
       const res = await this.userModel.find({});
       return res;
@@ -42,7 +43,7 @@ export class MongoRepository implements IDatabaseUser {
     }
   }
 
-  async viewOne(id?: string, email?: string): Promise<any | Error> {
+  async findByIdOrEmail(id?: string, email?: string): Promise<any | Error> {
     try {
       if (id) {
         const res = await this.userModel.findById(id);

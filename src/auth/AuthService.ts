@@ -1,13 +1,16 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { UserService } from "./UserService";
-import { User } from "./UserDomain";
+import { UserService } from "../user/UserService";
+import { User } from "../user/UserDomain";
 
 export class AuthService {
   constructor(private service: UserService) {}
 
   async login(email: string, password: string) {
-    const userList: User[] = await this.service.viewOne(undefined, email);
+    const userList: User[] = await this.service.findByIdOrEmail(
+      undefined,
+      email
+    );
 
     if (!userList) {
       return new Error("Não autorizado");

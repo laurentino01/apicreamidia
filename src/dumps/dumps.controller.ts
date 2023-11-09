@@ -4,9 +4,9 @@ import { mongoConnect } from "../middlewares/mongoConnect";
 
 import { DumpDomain } from "./DumpDomain";
 
-import { User } from "../admin/UserDomain";
-import { MongoRepository } from "../repositories/MongoRepository";
-import { UserService } from "../admin/UserService";
+import { User } from "../user/UserDomain";
+import { MongoRepository } from "../repositories/MongoUserRepository";
+import { UserService } from "../user/UserService";
 import { MongoDumpRepository } from "../repositories/MongoDumpRepository";
 import { DumpService } from "./dumpService";
 import { verifyUser } from "../middlewares/verifyUser";
@@ -108,4 +108,5 @@ router.delete("/:id", verifyUser, async (req, res, next) => {
 
   return http.ok(res, resDb);
 });
+
 export default router;

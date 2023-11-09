@@ -1,10 +1,11 @@
-import { User } from "../admin/UserDomain";
-import { UserDto } from "../admin/dto/UserDto";
+import { Document } from "mongoose";
+import { User } from "../user/UserDomain";
+import { UserDto } from "../user/dto/UserDto";
 
 export interface IDatabaseUser {
-  add(user: Omit<User, "id">): Promise<string | Error>;
+  add(user: Omit<User, "id">): Promise<Document<any> | Error>;
   remove(id: string): Promise<string | Error>;
-  update(id: string, newData: UserDto): Promise<string | Error>;
-  viewAll(): Promise<any | Error>;
-  viewOne(id?: string, email?: string): Promise<any | Error>;
+  updateById(id: string, newData: UserDto): Promise<string | Error>;
+  findAll(): Promise<any | Error>;
+  findByIdOrEmail(id?: string, email?: string): Promise<any | Error>;
 }
