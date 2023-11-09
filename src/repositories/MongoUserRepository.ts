@@ -9,6 +9,12 @@ export class MongoRepository implements IDatabaseUser {
 
   async add(user: User): Promise<Document<any> | Error> {
     try {
+      const emailExists = await this.userModel.findOne({ email: user.email });
+
+      if (emailExists) {
+        return new Error("409");
+      }
+
       const res = await this.userModel.create(user);
       return res;
     } catch (error: any) {
@@ -16,12 +22,18 @@ export class MongoRepository implements IDatabaseUser {
     }
   }
 
-  async remove(id: string): Promise<string | Error> {
+  async remove(id: string): Promise<any | Error> {
     try {
-      const res = this.userModel.deleteOne({ id });
-      return "usuario removido com sucesso!";
-    } catch (error) {
-      return "Erro ao excluir usuário";
+      const idExists = await this.userModel.findById(id);
+
+      if (!idExists) {
+        return new Error("404");
+      }
+
+      const res = await this.userModel.deleteOne({ _id: id });
+      return res;
+    } catch (error: any) {
+      return new Error(error);
     }
   }
 

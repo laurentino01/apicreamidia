@@ -3,6 +3,13 @@ import { Response } from "express";
 export class HttpHandler {
   constructor() {}
 
+  conflict(res: Response, data?: any) {
+    return res.status(409).json({
+      status: 409,
+      body: { data },
+    });
+  }
+
   ok(res: Response, data?: any) {
     return res.status(200).json({
       status: 200,

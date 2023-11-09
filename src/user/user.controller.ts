@@ -11,7 +11,7 @@ const router = Router();
 const http = new HttpHandler();
 
 /* Create User */
-router.post("/user/create", async (req: Request, res: Response) => {
+router.post("/create", async (req: Request, res: Response) => {
   const { name, email, password, role }: Omit<User, "id"> = req.body;
   const salt = 10;
   const encryptedPassword = await bcrypt.hash(password, salt);
@@ -22,10 +22,14 @@ router.post("/user/create", async (req: Request, res: Response) => {
   const resDb = await userService.add(user);
 
   if (resDb instanceof Error) {
-    http.badRequest(res, resDb);
+    if (resDb.message === "409") {
+      return http.conflict(res, "Email já cadastrado!");
+    }
+
+    return http.badRequest(res, resDb);
   }
 
-  http.ok(res, resDb);
+  return http.ok(res, resDb);
 });
 
 /* update */
@@ -82,9 +86,12 @@ router.delete("/:id", async (req: Request, res: Response) => {
   const resDb = await service.remove(id);
 
   if (resDb instanceof Error) {
-    http.badRequest(res, resDb);
+    if (resDb.message === "404") {
+      return http.notFound(res, "Usuário não encontrado!");
+    }
+    return http.badRequest(res, "Bad Request");
   }
-  http.ok(res, resDb);
+  return http.ok(res, resDb);
 });
 
 export default router;
