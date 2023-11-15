@@ -68,4 +68,18 @@ export class MongoRepository implements IDatabaseUser {
       return new Error("Erro ao mostrar usuários");
     }
   }
+
+  async findByEmail(email: string): Promise<User | Error> {
+    try {
+      const res = await this.userModel.findOne({ email: email });
+
+      if (!res) {
+        return new Error("404");
+      }
+
+      return res as User;
+    } catch (error: any) {
+      return new Error(error);
+    }
+  }
 }

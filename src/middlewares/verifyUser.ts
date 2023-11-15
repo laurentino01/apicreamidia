@@ -15,7 +15,7 @@ export async function verifyUser(
   const userService = new UserService(db);
   const authService = new AuthService(userService);
 
-  const payload = await authService.verifyToken(token);
+  const payload = await authService.verifyToken(token as string);
 
   if (payload instanceof Error) {
     return new HttpHandler().unauthorized(res, "Não Autorizado!");

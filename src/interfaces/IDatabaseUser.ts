@@ -8,4 +8,5 @@ export interface IDatabaseUser {
   updateById(id: string, newData: UserDto): Promise<string | Error>;
   findAll(): Promise<any | Error>;
   findByIdOrEmail(id?: string, email?: string): Promise<any | Error>;
+  findByEmail(email?: string): Promise<User | Error>;
 }

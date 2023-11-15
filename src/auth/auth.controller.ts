@@ -17,11 +17,11 @@ router.post("/", async (req: Request, res: Response) => {
   const token = await authService.login(email, password);
 
   if (token instanceof Error) {
-    http.unauthorized(res, "Não autorizado!");
+    return http.unauthorized(res, "Não autorizado!");
   }
 
   res.header("x-auth-token", token as string);
-  http.ok(res, { "x-auth-token": token });
+  return http.ok(res, { "x-auth-token": token });
 });
 
 export default router;

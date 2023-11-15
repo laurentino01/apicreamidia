@@ -48,7 +48,7 @@ router.post("/create", async (req: Request, res: Response) => {
 });
  */
 
-/* view all */
+/* get all */
 router.get("/", async (req: Request, res: Response) => {
   const db = new MongoRepository();
   const service = new UserService(db);
@@ -61,18 +61,11 @@ router.get("/", async (req: Request, res: Response) => {
   http.ok(res, resDb);
 });
 
-/* view one */
-router.get("/user/profile", async (req: Request, res: Response) => {
-  const payload = req.headers["x-auth-token"];
+/* get by id */
+router.get("/profile", verifyUser, async (req: Request, res: Response) => {
+  const payload = req.headers["user-payload"];
 
-  /* const db = new MongoRepository();
-  const service = new UserService(db);
-
-  const resDb = await service.findByIdOrEmail(payload as string); */
-
-  /*  if (resDb instanceof Error) {
-    http.badRequest(res, resDb);
-  } */
+  console.log(payload);
   http.ok(res, payload);
 });
 

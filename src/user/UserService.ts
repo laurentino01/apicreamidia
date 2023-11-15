@@ -30,4 +30,9 @@ export class UserService implements IDatabaseUser {
   async findByIdOrEmail(id?: string, email?: string): Promise<any | Error> {
     return await this.db.findByIdOrEmail(id, email);
   }
+
+  async findByEmail(email?: string): Promise<User | Error> {
+    const res = await this.db.findByEmail(email);
+    return res;
+  }
 }
